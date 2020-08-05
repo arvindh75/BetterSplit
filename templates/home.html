@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat&display=swap">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin&display=swap">
     <link rel="stylesheet" href={{ url_for("static", filename="common.css") }}>
+    <link rel="stylesheet" href={{ url_for("static", filename="forms.css") }}>
     <link rel="stylesheet" href={{ url_for("static", filename="main.css") }}>
 </head>
 <nav class="navbar fixed-top navbar-collapse navbar-light navbar-cut light">
@@ -18,6 +19,7 @@
         <img class="nav-logo" src="../static/logo_color.svg">
     </a>
     <div class="navbar-nav">
+        <!-- TODO: Square user icon for mobile -->
         <button id="userbtn" class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#profile">
             {{ '@' + profile['username'] }}
         </button>
@@ -27,11 +29,10 @@
     <div class="modal-dialog profile-modal-dialog">
         <div class="modal-content neo-box profile-modal light">
             <div class="modal-body light">
-
                 <div class="profile-modal-name">
                     Hello, {{ profile['name'] }}.
                 </div>
-                <div class="profile-modal-row">
+                <div class="profile-modal-row profile-modal-username">
                     {{ '@' + profile['username'] }}
                 </div>
                 <br>
@@ -42,7 +43,6 @@
                         </button>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
@@ -52,15 +52,19 @@
         <div class="row fullheight">
             <div class="col-xl-3 flex-col p-4 overflow-hidden">
                 <div id="dues" class="flex-row container neo-box">
-                    <div class="flex-col static-cell red">
-                        <!-- RED -->
+                    <div class="cell-holder-left"></div>
+                    <div class="flex-col static-cell minus">
+                        {{ dues['minus']}}
                     </div>
-                    <div class="flex-col static-cell blue">
-                        <!-- NET -->
+                    <div class="cell-divider"></div>
+                    <div class="flex-col static-cell net">
+                        {{ dues['net']}}
                     </div>
-                    <div class="flex-col static-cell green">
-                        <!-- GREEN -->
+                    <div class="cell-divider"></div>
+                    <div class="flex-col static-cell plus">
+                        {{ dues['plus']}}
                     </div>
+                    <div class="cell-holder-right"></div>
                 </div>
                 <div id="btncontainer" class="flex-row container-fluid overflow-hidden">
                     <button id="newbtn" class="btn main-btn btn-outline-warning"> NEW PAYMENT </button>
@@ -70,8 +74,25 @@
                     <div class="width-100 title-row overflow-hidden">
                         QUICK PAY
                     </div>
-                    <div class="flex-col width-100 height-100">
-                        <!-- QUICK PAY CARD -->
+                    <div id="qpay-card" class=" container-fluid flex-col width-100 height-100">
+                        <!-- TODO: Make amount container expand with text length -->
+                        <!-- TODO: Persistent rupee icon on left -->
+                        <div class="flex-row qpay-amount-container">
+                            {% if 'amount' in errors %}
+                                {{ form.amount(class='tfield-big neo-inset error-bg qpay-field', autocomplete='off')}}
+                            {% else %}
+                                {{ form.amount(class='tfield-big neo-inset qpay-field', autocomplete='off')}}
+                            {% endif %}
+                        </div>
+                        <!-- TODO: Persistent '@' icon on left -->
+                        <div class="flex-row qpay-to-container">
+                            {% if 'to' in errors %}
+                                {{ form.to(class='tfield-med neo-inset error-bg qpay-field', autocomplete='off')}}
+                            {% else %}
+                                {{ form.to(class='tfield-med neo-inset qpay-field', autocomplete='off')}}
+                            {% endif %}
+                        </div>
+                            <button type="button" class="btn btn-outline-dark formbtn qpaybtn"> PAY </button>
                     </div>
                 </div>
             </div>
